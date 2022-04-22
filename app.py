@@ -1,4 +1,3 @@
-
 from flask import *
 from src import Anime
 import os
@@ -50,7 +49,7 @@ def anim():
             'time': end-start,
             'url': anime.url,
             'airing': anime.airing,
-            'nsfw': anime.is_nsfw
+            'nsfw': anime.nsfw
         }
       except:
         end = time()
@@ -101,7 +100,7 @@ def anim():
             'time': end-start,
             'url': anime.url,
             'airing': anime.airing,
-            'nsfw': anime.is_nsfw
+            'nsfw': anime.nsfw
         }
     
     else:
