@@ -113,7 +113,7 @@ def error(e):
 	return {
         "status": 404
     }
-@app.route('/api', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def api():
     return {
         "msg": "Welcome to myanimelist unofficial api",
@@ -121,4 +121,4 @@ def api():
     }
 
 if __name__ == '__main__':
-	app.run(host='0.0.0.0', port=int(os.environ.get('PORT','5000')),debug=True)
+	app.run(debug=True)
