@@ -49,13 +49,13 @@ def genre_list(func: str):
                 atype.append('manga')
                 idnim.append(re.search(r'href\="\/manga\/genre\/(.*?)\/', func[a-1]).group(1))
                 name.append(re.search(r'title\="(.*?)"', func[a-1]).group(1))
-                url.append('https://myanimelist.net'+re.search(r'href\=\"(.*?)">', func[a-1]).group(1))
+                url.append('https://myanimelist.net'+re.search(r'href\=\"(.*?)" ti', func[a-1]).group(1))
                 hasil.append({'url': url[a-1], 'name': name[a-1], 'id': idnim[a-1], 'type': atype[a-1]})
             elif 'anime' in func[a-1]:
                 atype.append('anime')
                 idnim.append(re.search(r'href\="\/anime\/genre\/(.*?)\/', func[a-1]).group(1))
                 name.append(re.search(r'title\="(.*?)"', func[a-1]).group(1))
-                url.append('https://myanimelist.net'+re.search(r'href\=\"(.*?)">', func[a-1]).group(1))
+                url.append('https://myanimelist.net'+re.search(r'href\=\"(.*?)\" ti', func[a-1]).group(1))
                 hasil.append({'url': url[a-1], 'name': name[a-1], 'id': idnim[a-1], 'type': atype[a-1]})
     except:
         hasil = []

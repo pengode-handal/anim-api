@@ -14,7 +14,6 @@ def anim():
         'error': 'Input just One parameter'
       }
     elif request.args.get('q'):
-      try:
         start=time()
         anime = Anime(request.args.get('q'))
         end = time()
@@ -59,13 +58,6 @@ def anim():
             'synonyms': anime.syn_title,
             'image_url': anime.img_url,
             'trailer_url':anime.pv
-        }
-      except:
-        end = time()
-        return {
-          'status': False,
-          'error': 'Not Found',
-          'time': end-start
         }
     elif request.args.get('id'):
       if get(f"https://myanimelist.net/anime/{request.args.get('id')}/").status_code == 404:
