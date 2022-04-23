@@ -175,4 +175,3 @@ class Anime():
         self.en_title = StrFind('English:', soup)
         self.syn_title = StrFind('Synonyms:', soup)
 
-print(Anime('Boruto').img_url)
