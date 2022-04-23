@@ -72,7 +72,7 @@ class Anime():
                     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36",
                 })
         if mal_id == None:
-          url = 'https://search.yahoo.com/search?p=site:myanimelist.net/anime {}'.format(title)
+          url = 'https://duckduckgo.com/?q=site%3Amyanimelist.net/anime+{}&t=h_&ia=web'.format(title)
           res = s.get(url).text
           try: URL = 'https://myanimelist.net/anime/' + re.search(r'href="https://myanimelist.net/anime/(.*?)"', res).group(1)
           except:
