@@ -73,7 +73,7 @@ class Anime():
                 })
         if mal_id == None:
           url = 'https://www.bing.com/search?q=myanimelist.net%2BBoruto+'
-          res = s.get(url).text
+          res = requests.get(url).text
           try: URL = 'https://myanimelist.net/anime/' + re.search(r'href="https://myanimelist.net/anime/(.*?)"', res).group(1)
           except:
             print(res)
