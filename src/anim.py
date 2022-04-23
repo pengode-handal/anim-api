@@ -71,9 +71,13 @@ class Anime():
         s.headers.update({
                     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36",
                 })
+        headers = {
+    'User-agent':
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.19582'
+}
         if mal_id == None:
           url = 'https://www.bing.com/search?q=myanimelist.net%2BBoruto+'
-          res = requests.get(url).text
+          res = requests.get(url, headers=headers).text
           try: URL = 'https://myanimelist.net/anime/' + re.search(r'href="https://myanimelist.net/anime/(.*?)"', res).group(1)
           except:
             print(res)
