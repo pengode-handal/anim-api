@@ -69,14 +69,14 @@ class Anime():
     def __init__(self, title: str = None, mal_id = None):
         s = requests.Session()
         s.headers.update({
-                    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36",
+                    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36",
                 })
         headers = {
     'User-agent':
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.19582'
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36'
 }
         if mal_id == None:
-          url = 'https://www.bing.com/search?q=myanimelist.net%2BBoruto+'
+          url = 'https://www.bing.com/search?q=myanimelist.net/anime+{}&setlang=en-us'.format(title)
           res = requests.get(url, headers=headers).text
           try: URL = 'https://myanimelist.net/anime/' + re.search(r'href="https://myanimelist.net/anime/(.*?)"', res).group(1)
           except:
