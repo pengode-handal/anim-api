@@ -76,7 +76,9 @@ class Anime():
         if mal_id == None:
           url = 'https://www.bing.com/search?q=myanimelist.net%2B{}+anime'.format(title)
           res = s.get(url).text
-          URL = 'https://myanimelist.net/anime/' + re.search(r'<a href="https://myanimelist.net/anime/(.*?)"', res).group(1)
+          try: URL = 'https://myanimelist.net/anime/' + re.search(r'<a href="https://myanimelist.net/anime/(.*?)"', res).group(1)
+          except:
+            print(res)
         elif title == None:
           URL = f'https://myanimelist.net/anime/{mal_id}'
         id = re.search(r'anime/(\d+)', URL).group(1)
