@@ -68,13 +68,11 @@ def related(value, soup):
 class Anime():
     def __init__(self, title: str = None, mal_id = None):
         s = requests.Session()
-        s.cookies["cf_clearance"] = "cb4c883efc59d0e990caf7508902591f4569e7bf-1617321078-0-150"
         s.headers.update({
                     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36",
-                    'referer':'https://www.google.com/'
                 })
         if mal_id == None:
-          url = 'https://www.bing.com/search?q=myanimelist.net/anime {}'.format(title)
+          url = 'https://bing.com/search?q=myanimelist.net/anime {}'.format(title)
           res = s.get(url).text
           try: URL = 'https://myanimelist.net/anime/' + re.search(r'<a href="https://myanimelist.net/anime/(.*?)"', res).group(1)
           except:
