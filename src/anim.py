@@ -74,7 +74,7 @@ class Anime():
                     'referer':'https://www.google.com/'
                 })
         if mal_id == None:
-          url = 'https://www.bing.com/search?q=myanimelist.net%2B{}+anime'.format(title)
+          url = 'https://www.bing.com/search?q=myanimelist.net/anime {}'.format(title)
           res = s.get(url).text
           try: URL = 'https://myanimelist.net/anime/' + re.search(r'<a href="https://myanimelist.net/anime/(.*?)"', res).group(1)
           except:
