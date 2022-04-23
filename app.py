@@ -49,7 +49,16 @@ def anim():
             'time': end-start,
             'url': anime.url,
             'airing': anime.airing,
-            'nsfw': anime.nsfw
+            'nsfw': anime.nsfw,
+            'id': anime.id,
+            'theme': anime.theme,
+            'demographic': anime.demographic,
+            'description': anime.description,
+            'jp_title': anime.jp_title,
+            'en_title': anime.en_title,
+            'synonyms': anime.syn_title,
+            'image_url': anime.img_url,
+            'trailer_url':anime.pv
         }
       except:
         end = time()
@@ -100,7 +109,16 @@ def anim():
             'time': end-start,
             'url': anime.url,
             'airing': anime.airing,
-            'nsfw': anime.nsfw
+            'nsfw': anime.nsfw,
+            'id': anime.id,
+            'theme': anime.theme,
+            'demographic': anime.demographic,
+            'description': anime.description,
+            'jp_title': anime.jp_title,
+            'en_title': anime.en_title,
+            'synonyms': anime.syn_title,
+            'image_url': anime.img_url,
+            'trailer_url':anime.pv
         }
     
     else:

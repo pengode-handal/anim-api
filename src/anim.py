@@ -15,9 +15,9 @@ def StrFind(value, soup):
   try:
     return SoupFind(value, soup).next_sibling.strip()
   except:
-    return None
+    return 'Unknown'
 def ListInUrl(value, soup):
-    return SoupFind(value, soup)
+    return soup.find()
 def related_list(func):
     atype, idnim, title, url, hasil = [], [], [], [], []
     a = 0
@@ -36,6 +36,27 @@ def related_list(func):
                 title.append(re.search(r'">(.*?)</a>', func[a-1]).group(1))
                 url.append('https://myanimelist.net'+re.search(r'href\=\"(.*?)">', func[a-1]).group(1))
                 hasil.append({'url': url[a-1], 'title': title[a-1], 'id': idnim[a-1], 'type': atype[a-1]})
+    except:
+        hasil = []
+    return hasil
+def genre_list(func: str):
+    atype, idnim, name, url, hasil = [], [], [], [], []
+    a = 0
+    try:
+        for i in func:
+            a += 1
+            if 'manga' in func[a-1]:
+                atype.append('manga')
+                idnim.append(re.search(r'href\="\/manga\/genre\/(.*?)\/', func[a-1]).group(1))
+                name.append(re.search(r'title\="(.*?)"', func[a-1]).group(1))
+                url.append('https://myanimelist.net'+re.search(r'href\=\"(.*?)">', func[a-1]).group(1))
+                hasil.append({'url': url[a-1], 'name': name[a-1], 'id': idnim[a-1], 'type': atype[a-1]})
+            elif 'anime' in func[a-1]:
+                atype.append('anime')
+                idnim.append(re.search(r'href\="\/anime\/genre\/(.*?)\/', func[a-1]).group(1))
+                name.append(re.search(r'title\="(.*?)"', func[a-1]).group(1))
+                url.append('https://myanimelist.net'+re.search(r'href\=\"(.*?)">', func[a-1]).group(1))
+                hasil.append({'url': url[a-1], 'name': name[a-1], 'id': idnim[a-1], 'type': atype[a-1]})
     except:
         hasil = []
     return hasil
@@ -58,6 +79,7 @@ class Anime():
           URL = 'https://myanimelist.net/anime/' + re.search(r'<a href="https://myanimelist.net/anime/(.*?)"', res).group(1)
         elif title == None:
           URL = f'https://myanimelist.net/anime/{mal_id}'
+        id = re.search(r'anime/(\d+)', URL).group(1)
         soup = bs(s.get(URL).text, 'html.parser')
         episodes = soup.find('span', string='Episodes:').next_sibling.strip()
         status = soup.find('span', string='Status:').next_sibling.strip()
@@ -66,7 +88,7 @@ class Anime():
         try: 
           primer = soup.find('span', string='Premiered:').next_sibling.next_sibling.text 
         except:
-          primer = None
+          primer = 'Unknown'
         sequel = ListSoupFind('Sequel', soup)
         licensors= ListSoupFind('Licensors:', soup)
         type = re.search(r'<a href="https://myanimelist.net/topanime.php\?type\=(.*?)"', soup.prettify()).group(1).upper()
@@ -84,23 +106,38 @@ class Anime():
             studio = StrFind('Studio:', soup)
         producers = ListSoupFind('Producers:', soup)
         source = StrFind('Source:', soup)
-        genres = ListSoupFind('Genres:', soup)
-        if not genres:
-            genres = ListSoupFind('Genre:',soup)
+        try:
+            genres = genre_list(str(SoupFind('Genres:', soup).parent.find_all('a')).split('<a')[1:])
+        except:
+            genres = genre_list(str(SoupFind('Genre:', soup).parent.find_all('a')).split('<a')[1:])
+        try:
+            theme = genre_list(str(SoupFind('Theme:', soup).parent.find_all('a')).split('<a')[1:])
+        except:
+            theme = 'None'
+        try:
+            demographic = genre_list(str(SoupFind('Demographic:', soup).parent.find_all('a')).split('<a')[1:])
+        except:
+            demographic = 'None'
+        try: trailer_url = "https://www.youtube.com/watch?v="+re.search(r'embed\/(.*?)\?', soup.find('a', {'class': 'iframe js-fancybox-video video-unit promotion'})['href'] ).group(1)
+        except: trailer_url = 'None'
         duration = StrFind('Duration:', soup)
         rating = StrFind('Rating:', soup)
         members = StrFind('Members:', soup)
         favorites = StrFind('Favorites:', soup)
         ranked = StrFind('Ranked:', soup)
         popularity = StrFind('Popularity:', soup)
-        if 'Finished' in status:
-          airing = False
-        else:
+        description = soup.find("p", {"itemprop": "description"}).text
+        if 'airing' in str(status).lower():
           airing = True
-        if 'Mild' in rating:
+        else:
+          airing = False
+        if 'nudity' in rating or 'hentai' in rating:
           is_nsfw = True
         else:
           is_nsfw=False
+        try: img_url = soup.find('img', {'itemprop': 'image'})['data-src']
+        except: img_url = 'None'
+        self.img_url = img_url
         self.episode = episodes
         self.status = status
         self.aired = aired
@@ -129,3 +166,13 @@ class Anime():
         self.url = URL
         self.airing = airing
         self.nsfw = is_nsfw
+        self.id = id
+        self.demographic = demographic
+        self.theme = theme
+        self.description = description
+        self.pv = trailer_url or None
+        self.jp_title = StrFind('Japanese:', soup)
+        self.en_title = StrFind('English:', soup)
+        self.syn_title = StrFind('Synonyms:', soup)
+
+print(Anime('Boruto').img_url)
