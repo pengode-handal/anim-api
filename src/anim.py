@@ -16,53 +16,19 @@ def StrFind(value, soup):
     return SoupFind(value, soup).next_sibling.strip()
   except:
     return 'Unknown'
-def ListInUrl(value, soup):
-    return soup.find()
-def related_list(func):
-    atype, idnim, title, url, hasil = [], [], [], [], []
+
+def func_list(func: str, attrName='title', attrId: int=3):
+    hasil = []
     a = 0
     try:
         for i in func:
+            hasil.append({'url': 'https://myanimelist.net{}'.format(i['href']), attrName: i.text, 'id': i['href'].split('/')[attrId], 'type': i['href'].split('/')[1]})
             a += 1
-            if 'manga' in func[a-1]:
-                atype.append('manga')
-                idnim.append(re.search(r'href\="\/manga\/(.*?)\/', func[a-1]).group(1))
-                title.append(re.search(r'">(.*?)</a>', func[a-1]).group(1))
-                url.append('https://myanimelist.net'+re.search(r'href\=\"(.*?)">', func[a-1]).group(1))
-                hasil.append({'url': url[a-1], 'title': title[a-1], 'id': idnim[a-1], 'type': atype[a-1]})
-            elif 'anime' in func[a-1]:
-                atype.append('anime')
-                idnim.append(re.search(r'href\="\/anime\/(.*?)\/', func[a-1]).group(1))
-                title.append(re.search(r'">(.*?)</a>', func[a-1]).group(1))
-                url.append('https://myanimelist.net'+re.search(r'href\=\"(.*?)">', func[a-1]).group(1))
-                hasil.append({'url': url[a-1], 'title': title[a-1], 'id': idnim[a-1], 'type': atype[a-1]})
-    except:
-        hasil = []
+    except: pass
     return hasil
-def genre_list(func: str):
-    atype, idnim, name, url, hasil = [], [], [], [], []
-    a = 0
+def tagg(tag: str, value, soup):
     try:
-        for i in func:
-            a += 1
-            if 'manga' in func[a-1]:
-                atype.append('manga')
-                idnim.append(re.search(r'href\="\/manga\/genre\/(.*?)\/', func[a-1]).group(1))
-                name.append(re.search(r'title\="(.*?)"', func[a-1]).group(1))
-                url.append('https://myanimelist.net'+re.search(r'href\=\"(.*?)" ti', func[a-1]).group(1))
-                hasil.append({'url': url[a-1], 'name': name[a-1], 'id': idnim[a-1], 'type': atype[a-1]})
-            elif 'anime' in func[a-1]:
-                atype.append('anime')
-                idnim.append(re.search(r'href\="\/anime\/genre\/(.*?)\/', func[a-1]).group(1))
-                name.append(re.search(r'title\="(.*?)"', func[a-1]).group(1))
-                url.append('https://myanimelist.net'+re.search(r'href\=\"(.*?)\" ti', func[a-1]).group(1))
-                hasil.append({'url': url[a-1], 'name': name[a-1], 'id': idnim[a-1], 'type': atype[a-1]})
-    except:
-        hasil = []
-    return hasil
-def related(value, soup):
-    try:
-        return str(soup.find('td', string=value).next_element.next_element).split('<a')[1:]
+        return soup.find(tag, string=value).parent.find_all('a')
     except:
         return []
 class Anime():
@@ -93,35 +59,31 @@ class Anime():
           primer = soup.find('span', string='Premiered:').next_sibling.next_sibling.text 
         except:
           primer = 'Unknown'
-        sequel = ListSoupFind('Sequel', soup)
+        
         licensors= ListSoupFind('Licensors:', soup)
         type = re.search(r'<a href="https://myanimelist.net/topanime.php\?type\=(.*?)"', soup.prettify()).group(1).upper()
         orititle = soup.strong.text
         score = soup.find('span', string='Score:').next_sibling.next_sibling.text
         studio = ListSoupFind('Studios:', soup)
 
-        adaptation = related_list(related('Adaptation:', soup))
-        side = related_list(related('Side story:', soup))
-        prequel = related_list(related('Prequel:', soup))
-        alterver = related_list(related('Alternative version:', soup))
-        other = related_list(related('Other:', soup))
-        sequel = related_list(related('Sequel:', soup))
+        #Related anime
+        adaptation = func_list(tagg('td', 'Adaptation:', soup), attrId=2)
+        side = func_list(tagg('td', 'Side story:', soup), attrId=2)
+        prequel = func_list(tagg('td', 'Prequel:', soup), attrId=2)
+        alterver = func_list(tagg('td','Alternative version:', soup), attrId=2)
+        other = func_list(tagg('td','Other:', soup), attrId=2)
+        sequel = func_list(tagg('td','Sequel:', soup), attrId=2)
+        
         if not studio:
             studio = StrFind('Studio:', soup)
-        producers = ListSoupFind('Producers:', soup)
+        producers = func_list(tagg('span', 'Producers:', soup), 'name')
         source = StrFind('Source:', soup)
-        try:
-            genres = genre_list(str(SoupFind('Genres:', soup).parent.find_all('a')).split('<a')[1:])
-        except:
-            genres = genre_list(str(SoupFind('Genre:', soup).parent.find_all('a')).split('<a')[1:])
-        try:
-            theme = genre_list(str(SoupFind('Theme:', soup).parent.find_all('a')).split('<a')[1:])
-        except:
-            theme = 'None'
-        try:
-            demographic = genre_list(str(SoupFind('Demographic:', soup).parent.find_all('a')).split('<a')[1:])
-        except:
-            demographic = 'None'
+        try: genres = func_list(tagg('span','Genres:', soup), 'name')
+        except: genres = func_list(tagg('span','Genre:', soup), 'name')
+        try: theme = func_list(tagg('span','Theme:', soup), 'name')
+        except: theme = 'None'
+        try: demographic = func_list(tagg('span','Demographic:', soup), 'name')
+        except: demographic = 'None'
         try: trailer_url = "https://www.youtube.com/watch?v="+re.search(r'embed\/(.*?)\?', soup.find('a', {'class': 'iframe js-fancybox-video video-unit promotion'})['href'] ).group(1)
         except: trailer_url = 'None'
         duration = StrFind('Duration:', soup)
@@ -179,3 +141,4 @@ class Anime():
         self.en_title = StrFind('English:', soup)
         self.syn_title = StrFind('Synonyms:', soup)
 
+print(Anime('Boruto').adaptation)

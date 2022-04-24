@@ -127,7 +127,8 @@ def error(e):
 def api():
     return {
         "msg": "Welcome to myanimelist unofficial api",
-        "author": "Babwa Wibu"
+        "author": "Babwa Wibu",
+        "endpoint": "/api/anime?q=Boruto"
     }
 
 if __name__ == '__main__':
