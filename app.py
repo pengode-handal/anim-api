@@ -8,6 +8,8 @@ app = Flask(__name__)
 
 @app.route('/api/anime', methods=['GET', 'POST'])
 def anim():
+    response = Response()
+    response.headers["Access-Control-Allow-Origin"] = "*"
     if request.args.get('id') and request.args.get('q'):
       return {
         'status': False,
@@ -120,9 +122,12 @@ def anim():
         }
 @app.errorhandler(404)
 def error(e):
-	return {
-        "status": 404
-    }
+	return render_template('404.html')
+
+@app.route('/api', methods=['GET', 'POST'])
+def api():
+  return render_template('api.html')
+
 @app.route('/', methods=['GET', 'POST'])
 def api():
     return {
