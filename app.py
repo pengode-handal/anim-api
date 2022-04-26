@@ -3,9 +3,10 @@ from src import Anime
 import os
 from time import time
 from requests import get
+from flask_cors import CORS
 # mulai
 app = Flask(__name__)
-
+CORS(app)
 @app.route('/api/anime', methods=['GET', 'POST'])
 def anim():
     response = Response()
