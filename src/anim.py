@@ -141,4 +141,7 @@ class Anime():
         self.en_title = StrFind('English:', soup)
         self.syn_title = StrFind('Synonyms:', soup)
 
+<<<<<<< HEAD
 print(Anime('Boruto').adaptation)
+=======
+>>>>>>> 9a7fa9b3894b53a347623b6abd33490e53a155e0
