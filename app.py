@@ -125,7 +125,7 @@ def error(e):
 	return render_template('404.html')
 
 @app.route('/api', methods=['GET', 'POST'])
-def api():
+def imdek():
   return render_template('api.html')
 
 @app.route('/', methods=['GET', 'POST'])
