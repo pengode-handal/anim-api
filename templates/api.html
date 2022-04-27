@@ -149,16 +149,11 @@ axios.request(options).then(function (response) {
                 <pre><code>
                     
 $request = new HttpRequest();
-$request->setUrl('https://weeby.p.rapidapi.com/');
+$request->setUrl('https://apinim.herokuapp.com/api/anime');
 $request->setMethod(HTTP_METH_GET);
 
 $request->setQueryData([
-'image' => 'https://i.imgur.com/ULA89DP.png'
-]);
-
-$request->setHeaders([
-'X-RapidAPI-Host' => 'weeby.p.rapidapi.com',
-'X-RapidAPI-Key' => '3b21cac10emsha71be2936e61b84p19bcc1jsn0dead4ef590e'
+'q' => 'Maoujo de oyasumi'
 ]);
 
 try {
